@@ -1,0 +1,1453 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enterprise Customer Intelligence & Anomaly Detection | Executive Presentation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #080c14;
+      --bg-surface: rgba(15, 23, 42, 0.75);
+      --bg-card: rgba(30, 41, 59, 0.45);
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-accent: rgba(56, 189, 248, 0.3);
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --accent-blue: #38bdf8;
+      --accent-indigo: #818cf8;
+      --accent-emerald: #34d399;
+      --accent-amber: #fbbf24;
+      --accent-rose: #f43f5e;
+      --accent-purple: #c084fc;
+      --font-ar: 'Cairo', system-ui, sans-serif;
+      --font-en: 'Plus Jakarta Sans', system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: var(--font-ar);
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+      user-select: none;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    html[dir="ltr"] body {
+      font-family: var(--font-en);
+    }
+
+    /* Ambient Background Mesh */
+    .bg-mesh {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background: 
+        radial-gradient(circle at 15% 15%, rgba(56, 189, 248, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 85% 85%, rgba(129, 140, 248, 0.08) 0%, transparent 45%),
+        radial-gradient(circle at 50% 50%, rgba(15, 23, 42, 0.5) 0%, transparent 100%);
+    }
+
+    /* Presentation Container */
+    #deck {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1;
+    }
+
+    /* Individual Slide */
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 5rem 6.5rem 4.5rem;
+      opacity: 0;
+      visibility: hidden;
+      transform: scale(0.98) translateY(12px);
+      transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
+    }
+
+    .slide.active {
+      opacity: 1;
+      visibility: visible;
+      transform: scale(1) translateY(0);
+      pointer-events: auto;
+    }
+
+    /* Slide Header */
+    .slide-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 2rem;
+    }
+
+    .category-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent-blue);
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      padding: 0.35rem 0.85rem;
+      border-radius: 9999px;
+      margin-bottom: 0.6rem;
+    }
+
+    .slide-title {
+      font-size: 2.65rem;
+      font-weight: 800;
+      line-height: 1.2;
+      background: linear-gradient(135deg, #ffffff 30%, #94a3b8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+    }
+
+    .slide-subtitle {
+      font-size: 1.15rem;
+      color: var(--text-secondary);
+      max-width: 880px;
+      line-height: 1.5;
+    }
+
+    /* Slide Content Body */
+    .slide-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 1.5rem;
+    }
+
+    /* Glass Panels & Cards */
+    .glass-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border-subtle);
+      border-radius: 1.25rem;
+      padding: 1.75rem;
+      transition: all 0.25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .glass-card:hover {
+      border-color: var(--border-accent);
+      background: rgba(30, 41, 59, 0.6);
+      transform: translateY(-2px);
+    }
+
+    .card-glow-blue::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent-blue), transparent);
+    }
+
+    .card-glow-indigo::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent-indigo), transparent);
+    }
+
+    .card-glow-emerald::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent-emerald), transparent);
+    }
+
+    .card-glow-amber::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent-amber), transparent);
+    }
+
+    .card-glow-rose::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent-rose), transparent);
+    }
+
+    /* Grid Layouts */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.25rem;
+    }
+
+    .grid-5 {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1rem;
+    }
+
+    /* Big Numbers & Metrics */
+    .metric-value {
+      font-size: 3rem;
+      font-weight: 900;
+      font-family: var(--font-en);
+      line-height: 1;
+      letter-spacing: -0.02em;
+    }
+
+    .metric-label {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      margin-top: 0.5rem;
+      font-weight: 500;
+    }
+
+    .metric-pill {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.2rem 0.55rem;
+      border-radius: 6px;
+      margin-top: 0.5rem;
+    }
+
+    /* Table Styles */
+    .deck-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      border-radius: 1rem;
+      overflow: hidden;
+      border: 1px solid var(--border-subtle);
+      background: rgba(15, 23, 42, 0.4);
+    }
+
+    .deck-table th {
+      background: rgba(30, 41, 59, 0.8);
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 1rem 1.25rem;
+      text-align: inherit;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .deck-table td {
+      padding: 1rem 1.25rem;
+      font-size: 0.95rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      color: var(--text-primary);
+    }
+
+    .deck-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .deck-table tr:hover td {
+      background: rgba(56, 189, 248, 0.04);
+    }
+
+    /* Badges & Tags */
+    .cohort-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      font-weight: 800;
+      font-size: 0.85rem;
+      font-family: var(--font-en);
+    }
+
+    /* Code & Architecture Block */
+    .code-diagram {
+      background: rgba(5, 8, 15, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
+      line-height: 1.6;
+      color: #38bdf8;
+      white-space: pre;
+      overflow-x: auto;
+    }
+
+    /* UI Controls (Top & Bottom Bar) */
+    .deck-topbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      padding: 0 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 50;
+      background: linear-gradient(180deg, rgba(8, 12, 20, 0.9) 0%, transparent 100%);
+      pointer-events: auto;
+    }
+
+    .brand-mark {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .brand-mark-dot {
+      width: 10px;
+      height: 10px;
+      background: var(--accent-blue);
+      border-radius: 50%;
+      box-shadow: 0 0 12px var(--accent-blue);
+    }
+
+    .controls-group {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .ctrl-btn {
+      background: rgba(30, 41, 59, 0.7);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      padding: 0.45rem 0.95rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      transition: all 0.2s ease;
+    }
+
+    .ctrl-btn:hover {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: var(--accent-blue);
+      color: #ffffff;
+    }
+
+    /* Bottom Navigation Bar */
+    .deck-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 64px;
+      padding: 0 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 50;
+      background: linear-gradient(0deg, rgba(8, 12, 20, 0.95) 0%, transparent 100%);
+    }
+
+    .progress-track {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.06);
+      z-index: 60;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent-blue), var(--accent-indigo));
+      width: 8.33%;
+      transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .slide-counter {
+      font-family: var(--font-en);
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+      letter-spacing: 0.05em;
+    }
+
+    /* Speaker Notes Drawer */
+    #speaker-notes {
+      position: fixed;
+      bottom: 64px;
+      left: 3rem;
+      right: 3rem;
+      max-height: 220px;
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--accent-blue);
+      border-radius: 1rem;
+      padding: 1.25rem 1.75rem;
+      z-index: 100;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+      display: none;
+      overflow-y: auto;
+      animation: slideUp 0.3s ease;
+    }
+
+    #speaker-notes.open {
+      display: block;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .notes-title {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent-blue);
+      font-weight: 800;
+      margin-bottom: 0.4rem;
+    }
+
+    .notes-content {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #e2e8f0;
+    }
+
+    /* Keyboard Hints */
+    .kbd-pill {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+      padding: 0.15rem 0.4rem;
+      font-size: 0.72rem;
+      font-family: var(--font-mono);
+      color: var(--text-secondary);
+    }
+
+    /* Print / PDF Export Styles */
+    @media print {
+      @page {
+        size: 16in 9in landscape;
+        margin: 0;
+      }
+      body {
+        overflow: visible !important;
+        height: auto !important;
+        background: #080c14 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      .bg-mesh, .deck-topbar, .deck-nav, .progress-track, #speaker-notes {
+        display: none !important;
+      }
+      #deck {
+        display: block !important;
+        height: auto !important;
+        width: 100% !important;
+      }
+      .slide {
+        position: relative !important;
+        display: flex !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: none !important;
+        height: 100vh !important;
+        max-height: 100vh !important;
+        page-break-after: always !important;
+        break-after: page !important;
+        padding: 4rem 5rem !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-mesh"></div>
+
+  <!-- Top Navigation & Controls -->
+  <header class="deck-topbar">
+    <div class="brand-mark">
+      <div class="brand-mark-dot"></div>
+      <span data-en="ENTERPRISE DUAL-ENGINE AI" data-ar="نظام الذكاء الاصطناعي الهجين للشركات">نظام الذكاء الاصطناعي الهجين للشركات</span>
+    </div>
+    <div class="controls-group">
+      <button class="ctrl-btn" onclick="toggleLanguage()" title="تبديل اللغة / Toggle Language (Key: L)">
+        🌐 <span id="lang-btn-text">English</span>
+      </button>
+      <button class="ctrl-btn" onclick="toggleSpeakerNotes()" title="ملاحظات العارض / Speaker Notes (Key: S)">
+        🎙️ <span data-en="Speaker Notes" data-ar="ملاحظات الإلقاء">ملاحظات الإلقاء</span>
+      </button>
+      <button class="ctrl-btn" onclick="window.print()" title="تصدير كملف PDF / Export PDF (Key: P)">
+        📄 <span data-en="Export PDF" data-ar="تصدير PDF">تصدير PDF</span>
+      </button>
+      <button class="ctrl-btn" onclick="toggleFullscreen()" title="ملء الشاشة / Fullscreen (Key: F)">
+        ⛶ <span data-en="Fullscreen" data-ar="ملء الشاشة">ملء الشاشة</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Slide Deck Presentation Canvas -->
+  <main id="deck">
+
+    <!-- ==================== SLIDE 01: COVER ==================== -->
+    <section class="slide active" id="slide-1" data-slide="1">
+      <div class="slide-header">
+        <div>
+          <span class="category-tag" data-en="STRATEGIC EXECUTIVE BRIEFING" data-ar="العرض التنفيذي الاستراتيجي">العرض التنفيذي الاستراتيجي</span>
+          <h1 class="slide-title" data-en="Enterprise Customer Intelligence & Anomaly Detection" data-ar="منظومة الذكاء الاصطناعي لتجزئة العملاء وكشف الأنماط الاستثنائية">منظومة الذكاء الاصطناعي لتجزئة العملاء وكشف الأنماط الاستثنائية</h1>
+          <p class="slide-subtitle" data-en="Dual-Engine Unsupervised Machine Learning for High-Precision Customer Profiling and Portfolio Risk Defense at the Edge." data-ar="محرك هجين ثنائي بالتعلم غير الموجه لتقسيم العملاء بدقة فائقة وحماية المحفظة الائتمانية دون تأخير زمني.">محرك هجين ثنائي بالتعلم غير الموجه لتقسيم العملاء بدقة فائقة وحماية المحفظة الائتمانية دون تأخير زمني.</p>
+        </div>
+      </div>
+
+      <div class="slide-body">
+        <div class="grid-4">
+          <div class="glass-card card-glow-blue">
+            <div class="metric-value" style="color: var(--accent-blue)">8,950</div>
+            <div class="metric-label" data-en="Active Credit Portfolios Analyzed" data-ar="حساب ائتماني نشط تم تحليله">حساب ائتماني نشط تم تحليله</div>
+            <span class="metric-pill" style="background: rgba(56, 189, 248, 0.15); color: var(--accent-blue);" data-en="100% Ingested" data-ar="تغطية كاملة للمحفظة">تغطية كاملة للمحفظة</span>
+          </div>
+
+          <div class="glass-card card-glow-indigo">
+            <div class="metric-value" style="color: var(--accent-indigo)">5</div>
+            <div class="metric-label" data-en="Statistically Distinct Personas" data-ar="شرائح سلوكية مكتشفة بدقة">شرائح سلوكية مكتشفة بدقة</div>
+            <span class="metric-pill" style="background: rgba(129, 140, 248, 0.15); color: var(--accent-indigo);" data-en="K-Means Cluster Matrix" data-ar="مصفوفة عنقودية ذكية">مصفوفة عنقودية ذكية</span>
+          </div>
+
+          <div class="glass-card card-glow-rose">
+            <div class="metric-value" style="color: var(--accent-rose)">3.8%</div>
+            <div class="metric-label" data-en="High-Risk Behavioral Outliers" data-ar="أنماط استثنائية معزولة (مخاطر)">أنماط استثنائية معزولة (مخاطر)</div>
+            <span class="metric-pill" style="background: rgba(244, 63, 94, 0.15); color: var(--accent-rose);" data-en="DBSCAN Density Isolated" data-ar="كشف مبكر بدون بيانات مسبقة">كشف مبكر بدون بيانات مسبقة</span>
+          </div>
+
+          <div class="glass-card card-glow-emerald">
+            <div class="metric-value" style="color: var(--accent-emerald)">&lt;1ms</div>
+            <div class="metric-label" data-en="Client-Side Inference Latency" data-ar="زمن الاستنتاج على جهاز العميل">زمن الاستنتاج على جهاز العميل</div>
+            <span class="metric-pill" style="background: rgba(52, 211, 153, 0.15); color: var(--accent-emerald);" data-en="Zero Server GPU Costs" data-ar="خصوصية تامة 100% GDPR">خصوصية تامة 100% GDPR</span>
+          </div>
+        </div>
+
+        <div class="glass-card" style="display: flex; justify-content: space-between; align-items: center; background: rgba(15, 23, 42, 0.6); padding: 1.25rem 2rem;">
+          <div style="display: flex; gap: 2.5rem;">
+            <div>
+              <span style="font-size: 0.8rem; color: var(--text-muted);" data-en="Target Portfolio" data-ar="المحفظة المستهدفة">المحفظة المستهدفة</span>
+              <p style="font-weight: 700; color: #ffffff;" data-en="Commercial Credit & Retail Banking" data-ar="الائتمان المصرفي والتجزئة المالية">الائتمان المصرفي والتجزئة المالية</p>
+            </div>
+            <div>
+              <span style="font-size: 0.8rem; color: var(--text-muted);" data-en="Core AI Architecture" data-ar="الهندسة المعمارية للنظام">الهندسة المعمارية للنظام</span>
+              <p style="font-weight: 700; color: #ffffff;" data-en="Hybrid K-Means + DBSCAN + PCA" data-ar="هجين K-Means و DBSCAN و PCA">هجين K-Means و DBSCAN و PCA</p>
+            </div>
+            <div>
+              <span style="font-size: 0.8rem; color: var(--text-muted);" data-en="Data Governance" data-ar="حوكمة البيانات">حوكمة البيانات</span>
+              <p style="font-weight: 700; color: #ffffff;" data-en="Zero PII Egress (Edge Processing)" data-ar="معالجة داخلية دون إرسال بيانات سرية">معالجة داخلية دون إرسال بيانات سرية</p>
+            </div>
+          </div>
+          <div style="font-size: 0.85rem; color: var(--text-secondary); font-family: var(--font-mono);">
+            v2.4.0 • Enterprise Edition
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 02: THE BURNING PLATFORM ==================== -->
+    <section class="slide" id="slide-2" data-slide="2">
+      <div class="slide-header">
+        <div>
+          <span class="category-tag" data-en="THE STRATEGIC CHALLENGE" data-ar="التحدي الاستراتيجي في قطاع البنوك">التحدي الاستراتيجي في قطاع البنوك</span>
+          <h2 class="slide-title" data-en="The $42M Portfolio Blindspot" data-ar="الفجوة التقديرية البالغة 42 مليون دولار">الفجوة التقديرية البالغة 42 مليون دولار</h2>
+          <p class="slide-subtitle" data-en="Why Traditional Rule Engines & Broad Demographics Fail Modern Banking Portfolios." data-ar="لماذا تفشل قواعد الأعمال التقليدية والتقسيم الديموغرافي السطحي أمام السلوك المالي الحقيقي للعملاء؟">لماذا تفشل قواعد الأعمال التقليدية والتقسيم الديموغرافي السطحي أمام السلوك المالي الحقيقي للعملاء؟</p>
+        </div>
+      </div>
+
+      <div class="slide-body">
+        <div class="grid-3">
+          <div class="glass-card card-glow-rose">
+            <h3 style="color: var(--accent-rose); font-size: 1.3rem; margin-bottom: 0.75rem;" data-en="1. One-Size-Fits-All Marketing" data-ar="1. عروض تسويقية عشوائية">1. عروض تسويقية عشوائية</h3>
+            <p style="color: var(--text-secondary); line-height: 1.6; font-size: 0.95rem;" data-en="Broad demographic segments (age, income) ignore actual card usage. High-spending disciplined transactors receive cash-advance offers, while cash-dependent borrowers receive retail discounts, driving customer churn and sub-2% conversion." data-ar="الاعتماد على التقسيم العمري أو الوظيفي يتجاهل السلوك الفعلي للبطاقة. يحصل العميل المنتظم على عروض قروض كاش لا يحتاجها، بينما يحصل المقترض على كوبونات تسوق، مما يؤدي لمعدل استجابة أقل من 2%.">الاعتماد على التقسيم العمري أو الوظيفي يتجاهل السلوك الفعلي للبطاقة. يحصل العميل المنتظم على عروض قروض كاش لا يحتاجها، بينما يحصل المقترض على كوبونات تسوق، مما يؤدي لمعدل استجابة أقل من 2%.</p>
+            <div style="margin-top: 1.25rem; font-weight: 700; color: #ffffff; font-size: 0.9rem;" data-en="Consequence: -45% Campaign Efficiency" data-ar="النتيجة: إهدار 45% من ميزانيات الحملات">النتيجة: إهدار 45% من ميزانيات الحملات</div>
+          </div>
+
+          <div class="glass-card card-glow-amber">
+            <h3 style="color: var(--accent-amber); font-size: 1.3rem; margin-bottom: 0.75rem;" data-en="2. Invisible Credit Distress" data-ar="2. عجز ائتماني غير مرئي مسبقاً">2. عجز ائتماني غير مرئي مسبقاً</h3>
+            <p style="color: var(--text-secondary); line-height: 1.6; font-size: 0.95rem;" data-en="Customers don't default overnight. Distress manifests through subtle behavioral shifts: surging cash advance reliance, dwindling purchase velocity, and minimum-only payments. Traditional credit scorecards only react after the first missed bill." data-ar="العميل لا يتعثر فجأة، بل تظهر عليه مؤشرات تدريجية: سحب نقدي متكرر، انعدام المشتريات، والاكتفاء بسداد الحد الأدنى. الأنظمة الحالية لا تشعر بالخطر إلا بعد فوات الأوان وحصول أول تعثر رسمي.">العميل لا يتعثر فجأة، بل تظهر عليه مؤشرات تدريجية: سحب نقدي متكرر، انعدام المشتريات، والاكتفاء بسداد الحد الأدنى. الأنظمة الحالية لا تشعر بالخطر إلا بعد فوات الأوان وحصول أول تعثر رسمي.</p>
+            <div style="margin-top: 1.25rem; font-weight: 700; color: #ffffff; font-size: 0.9rem;" data-en="Consequence: Unmitigated Loss Reserves" data-ar="النتيجة: تضخم مخصصات الديون المعدومة">النتيجة: تضخم مخصصات الديون المعدومة</div>
+          </div>
+
+          <div class="glass-card card-glow-blue">
+            <h3 style="color: var(--accent-blue); font-size: 1.3rem; margin-bottom: 0.75rem;" data-en="3. Latency & Privacy Gridlock" data-ar="3. بطء الاستجابة ومخاوف الخصوصية">3. بطء الاستجابة ومخاوف الخصوصية</h3>
+            <p style="color: var(--text-secondary); line-height: 1.6; font-size: 0.95rem;" data-en="Centralized data lake jobs take 7 to 14 days to regenerate cohorts. Meanwhile, transferring raw customer balance and credit histories across external cloud APIs triggers massive GDPR, PCI-DSS compliance red-tape and server bills." data-ar="تستغرق تحليلات بحيرة البيانات المركزية بين أسبوع إلى أسبوعين لإعادة بناء الشرائح. كما أن إرسال تفاصيل بطاقات العملاء إلى خدمات سحابية خارجية يثير معوقات تنظيمية معقدة وتكاليف خوادم باهظة.">تستغرق تحليلات بحيرة البيانات المركزية بين أسبوع إلى أسبوعين لإعادة بناء الشرائح. كما أن إرسال تفاصيل بطاقات العملاء إلى خدمات سحابية خارجية يثير معوقات تنظيمية معقدة وتكاليف خوادم باهظة.</p>
+            <div style="margin-top: 1.25rem; font-weight: 700; color: #ffffff; font-size: 0.9rem;" data-en="Consequence: 14-Day Decision Latency" data-ar="النتيجة: فجوة اتخاذ قرار تمتد لأسبوعين">النتيجة: فجوة اتخاذ قرار تمتد لأسبوعين</div>
+          </div>
+        </div>
+
+        <div class="glass-card" style="border-color: rgba(244, 63, 94, 0.3); background: rgba(244, 63, 94, 0.05); padding: 1.25rem 2rem;">
+          <div style="display: flex; align-items: center; justify-content: space-between;">
+            <div style="display: flex; align-items: center; gap: 1rem;">
+              <span style="font-size: 1.8rem;">⚠️</span>
+              <div>
+                <h4 style="color: #ffffff; font-size: 1.05rem;" data-en="The Commercial Imperative" data-ar="الحاجة الملحة للتغيير">الحاجة الملحة للتغيير</h4>
+                <p style="color: var(--text-secondary); font-size: 0.9rem;" data-en="Financial institutions require a deterministic, client-facing engine capable of segmenting accounts in sub-second time without exposing PII." data-ar="المؤسسات المالية بحاجة إلى نظام ذكي فوري يحدد شخصية العميل في جزء من الثانية دون أي تسريب لبياناته المالية السرية.">المؤسسات المالية بحاجة إلى نظام ذكي فوري يحدد شخصية العميل في جزء من الثانية دون أي تسريب لبياناته المالية السرية.</p>
+              </div>
+            </div>
+            <div style="text-align: right; font-family: var(--font-en); font-weight: 800; color: var(--accent-rose); font-size: 1.5rem;">
+              $42,000,000+
+              <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;" data-en="Annual At-Risk Value" data-ar="قيمة معرّضة للهدر سنوياً">قيمة معرّضة للهدر سنوياً</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 03: THE DUAL-ENGINE SOLUTION ==================== -->
+    <section class="slide" id="slide-3" data-slide="3">
+      <div class="slide-header">
+        <div>
+          <span class="category-tag" data-en="CORE SOLUTION ARCHITECTURE" data-ar="الحل المبتكر: الذكاء الاصطناعي الهجين">الحل المبتكر: الذكاء الاصطناعي الهجين</span>
+          <h2 class="slide-title" data-en="The Dual-Engine AI Framework" data-ar="هندسة المحرك الهجين المزدوج">هندسة المحرك الهجين المزدوج</h2>
+          <p class="slide-subtitle" data-en="Bridging Unsupervised K-Means Clustering and DBSCAN Spatial Density Estimation for Real-Time Execution." data-ar="الدمج بين التجميع العنقودي المتقن K-Means ومسح الكثافة الفراغية DBSCAN لتقديم قرار لحظي متكامل.">الدمج بين التجميع العنقودي المتقن K-Means ومسح الكثافة الفراغية DBSCAN لتقديم قرار لحظي متكامل.</p>
+        </div>
+      </div>
+
+      <div class="slide-body">
+        <div class="grid-2">
+          <!-- Engine A -->
+          <div class="glass-card card-glow-indigo" style="display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <span style="font-size: 0.8rem; font-weight: 700; color: var(--accent-indigo); text-transform: uppercase;" data-en="ENGINE ALPHA • COHORT OPTIMIZER" data-ar="المحرك الأول: مصنف الشرائح">المحرك الأول: مصنف الشرائح</span>
+                <span class="cohort-badge" style="background: rgba(129, 140, 248, 0.2); color: var(--accent-indigo);">K</span>
+              </div>
+              <h3 style="font-size: 1.6rem; font-weight: 800; margin-bottom: 0.75rem;" data-en="K-Means Clustering (K=5)" data-ar="التجميع العنقودي K-Means">التجميع العنقودي K-Means</h3>
+              <p style="color: var(--text-secondary); line-height: 1.6; font-size: 0.95rem; margin-bottom: 1.25rem;" data-en="Discovers optimal, non-overlapping behavioral personas by iteratively minimizing inertia across high-dimensional financial feature space. Each customer is mapped to their closest behavioral centroid." data-ar="يكتشف الشرائح السلوكية المثلى عبر تقليل تشتت البيانات (Inertia) في فضاء الميزات المالية متعدد الأبعاد، لتعيين كل حساب بدقة داخل مركزه السلوكي الأقرب.">يكتشف الشرائح السلوكية المثلى عبر تقليل تشتت البيانات (Inertia) في فضاء الميزات المالية متعدد الأبعاد، لتعيين كل حساب بدقة داخل مركزه السلوكي الأقرب.</p>
+
+              <div style="background: rgba(0, 0, 0, 0.3); border-radius: 0.75rem; padding: 1rem; font-family: var(--font-mono); font-size: 0.85rem; color: #818cf8; margin-bottom: 1rem;">
+                Centroids: 5 Baseline Personas<br>
+                Convergence: 300 Iterations Max<br>
+                Inference: Vectorized Euclidean Distance
+              </div>
+            </div>
+            <div style="border-top: 1px solid var(--border-subtle); padding-top: 1rem; display: flex; justify-content: space-between;">
+              <span style="font-size: 0.85rem; color: var(--text-muted);" data-en="Role in Portfolio" data-ar="الدور الاستراتيجي">الدور الاستراتيجي</span>
+              <span style="font-size: 0.85rem; font-weight: 700; color: #ffffff;" data-en="Targeted Commercial Playbooks" data-ar="توجيه استراتيجيات التسويق والائتمان">توجيه استراتيجيات التسويق والائتمان</span>
+            </div>
+          </div>
+
+          <!-- Engine B -->
+          <div class="glass-card card-glow-rose" style="display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <span style="font-size: 0.8rem; font-weight: 700; color: var(--accent-rose); text-transform: uppercase;" data-en="ENGINE BETA • RISK RADAR" data-ar="المحرك الثاني: رادار المخاطر والشذوذ">المحرك الثاني: رادار المخاطر والشذوذ</span>
+                <span class="cohort-badge" style="background: rgba(244, 63, 94, 0.2); color: var(--accent-rose);">D</span>
+              </div>
+              <h3 style="font-size: 1.6rem; font-weight: 800; margin-bottom: 0.75rem;" data-en="DBSCAN Spatial Density Scanner" data-ar="ماسح الكثافة الفراغية DBSCAN">ماسح الكثافة الفراغية DBSCAN</h3>
+              <p style="color: var(--text-secondary); line-height: 1.6; font-size: 0.95rem; margin-bottom: 1.25rem;" data-en="Operates without prior labeled fraud cases. Evaluates whether a customer's multidimensional coordinates reside within a dense neighborhood envelope (ε = 1.5, MinSamples = 5) or stand out as high-risk noise." data-ar="يعمل بدون الحاجة لبيانات احتيال سابقة. يقيس ما إذا كانت إحداثيات العميل تقع ضمن نطاق الكثافة الطبيعي (ε = 1.5) أو تشذ في الفضاء المالي كحالة غير مسبوقة تستوجب التدقيق.">يعمل بدون الحاجة لبيانات احتيال سابقة. يقيس ما إذا كانت إحداثيات العميل تقع ضمن نطاق الكثافة الطبيعي (ε = 1.5) أو تشذ في الفضاء المالي كحالة غير مسبوقة تستوجب التدقيق.</p>
+
+              <div style="background: rgba(0, 0, 0, 0.3); border-radius: 0.75rem; padding: 1rem; font-family: var(--font-mono); font-size: 0.85rem; color: #f43f5e; margin-bottom: 1rem;">
+                Epsilon (ε): 1.5 Density Radius<br>
+                Core Point MinSamples: 5 Records<br>
+                Noise Outliers: 342 High-Variance Accounts
+              </div>
+            </div>
+            <div style="border-top: 1px solid var(--border-subtle); padding-top: 1rem; display: flex; justify-content: space-between;">
+              <span style="font-size: 0.85rem; color: var(--text-muted);" data-en="Role in Portfolio" data-ar="الدور الاستراتيجي">الدور الاستراتيجي</span>
+              <span style="font-size: 0.85rem; font-weight: 700; color: #ffffff;" data-en="Zero-Day Anomaly & Fraud Defense" data-ar="حماية مبكرة ضد التعثر والعمليات المريبة">حماية مبكرة ضد التعثر والعمليات المريبة</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card" style="background: rgba(56, 189, 248, 0.05); border-color: rgba(56, 189, 248, 0.2); padding: 1rem 1.75rem; display: flex; align-items: center; justify-content: space-between;">
+          <span style="font-weight: 700; color: #ffffff;" data-en="Synergy: Dual Assessment in a Single Pass" data-ar="التكامل: تقييم سلوكي + فحص مخاطر في نفس اللحظة">التكامل: تقييم سلوكي + فحص مخاطر في نفس اللحظة</span>
+          <span style="font-size: 0.9rem; color: var(--accent-blue);" data-en="Every customer receives a segment playbook AND an immediate anomaly risk score." data-ar="يحصل كل عميل على استراتيجية تسويقية مخصصة إلى جانب مؤشر مخاطر فوري.">يحصل كل عميل على استراتيجية تسويقية مخصصة إلى جانب مؤشر مخاطر فوري.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 04: ML PIPELINE & MATH ==================== -->
+    <section class="slide" id="slide-4" data-slide="4">
+      <div class="slide-header">
+        <div>
+          <span class="category-tag" data-en="SCIENTIFIC RIGOR & MATHEMATICS" data-ar="الصرامة العلمية والنمذجة الرياضية">الصرامة العلمية والنمذجة الرياضية</span>
+          <h2 class="slide-title" data-en="The Production ML Pipeline" data-ar="خط معالجة البيانات والتحويل الرياضي">خط معالجة البيانات والتحويل الرياضي</h2>
+          <p class="slide-subtitle" data-en="From Raw Credit Logs to Skewness Reduction, Z-Score Scaling, and 2D PCA Dimensionality Reduction." data-ar="من البيانات الخام إلى تقليل الانحراف الإحصائي، وتوحيد المقاييس Z-Score، وتخفيض الأبعاد عبر PCA.">من البيانات الخام إلى تقليل الانحراف الإحصائي، وتوحيد المقاييس Z-Score، وتخفيض الأبعاد عبر PCA.</p>
+        </div>
+      </div>
+
+      <div class="slide-body">
+        <div class="grid-4">
+          <div class="glass-card card-glow-blue">
+            <span style="font-size: 0.8rem; font-family: var(--font-mono); color: var(--accent-blue);">STEP 01</span>
+            <h4 style="font-size: 1.15rem; font-weight: 700; margin: 0.5rem 0;" data-en="Median Imputation" data-ar="معالجة القيم المفقودة">معالجة القيم المفقودة</h4>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5;" data-en="Robust median substitution applied to MINIMUM_PAYMENTS and CREDIT_LIMIT. Prevents extreme outlier contamination during distance calculations." data-ar="استبدال القيم المفقودة بالوسيط الحسابي للمحافظة على استقرار التوزيع وتجنب تشويه المسافات بالقيم الشاذة.">استبدال القيم المفقودة بالوسيط الحسابي للمحافظة على استقرار التوزيع وتجنب تشويه المسافات بالقيم الشاذة.</p>
+            <div style="margin-top: 1rem; font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-muted);">x̂ = Median(X)</div>
+          </div>
+
+          <div class="glass-card card-glow-indigo">
+            <span style="font-size: 0.8rem; font-family: var(--font-mono); color: var(--accent-indigo);">STEP 02</span>
+            <h4 style="font-size: 1.15rem; font-weight: 700; margin: 0.5rem 0;" data-en="Log1p Skew Reduction" data-ar="تقليص الانحراف (Log1p)">تقليص الانحراف (Log1p)</h4>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5;" data-en="Applied to high-variance financial features (Balance, Purchases, Payments). Compresses heavy right-skewed tails into standard Gaussian shapes." data-ar="تطبيق اللوغاريتم الطبيعي على المتغيرات المالية ذات الانحراف الشديد مثل الأرصدة والمشتريات والمدفوعات لتسويتها.">تطبيق اللوغاريتم الطبيعي على المتغيرات المالية ذات الانحراف الشديد مثل الأرصدة والمشتريات والمدفوعات لتسويتها.</p>
+            <div style="margin-top: 1rem; font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-muted);">x' = ln(1 + x)</div>
+          </div>
+
+          <div class="glass-card card-glow-purple">
+            <span style="font-size: 0.8rem; font-family: var(--font-mono); color: var(--accent-purple);">STEP 03</span>
+            <h4 style="font-size: 1.15rem; font-weight: 700; margin: 0.5rem 0;" data-en="Z-Score Standardization" data-ar="توحيد المقاييس (StandardScaler)">توحيد المقاييس (StandardScaler)</h4>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5;" data-en="Equalizes feature variance across balance amounts ($) and payment ratios (%). Prevents large dollar figures from dominating Euclidean space." data-ar="توحيد التباين لجميع الميزات بحيث يكون المتوسط 0 والانحراف 1، لمنع هيمنة مبالغ الأرصدة الكبيرة على حساب المسافات.">توحيد التباين لجميع الميزات بحيث يكون المتوسط 0 والانحراف 1، لمنع هيمنة مبالغ الأرصدة الكبيرة على حساب المسافات.</p>
+            <div style="margin-top: 1rem; font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-muted);">z = (x' - μ) / σ</div>
+          </div>
+
+          <div class="glass-card card-glow-emerald">
+            <span style="font-size: 0.8rem; font-family: var(--font-mono); color: var(--accent-emerald);">STEP 04</span>
+            <h4 style="font-size: 1.15rem; font-weight: 700; margin: 0.5rem 0;" data-en="2D PCA Projection" data-ar="الإسقاط ثنائي الأبعاد (PCA)">الإسقاط ثنائي الأبعاد (PCA)</h4>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5;" data-en="Principal Component Analysis captures 56.4% cumulative variance in 2 orthogonal axes (PC1: Spending, PC2: Liquidity Pattern) for 120 FPS rendering." data-ar="تخفيض الأبعاد لاستخلاص 56.4% من التباين في محورين أساسيين (النشاط الشرائي ونمط السيولة) للعرض التفاعلي السلس.">تخفيض الأبعاد لاستخلاص 56.4% من التباين في محورين أساسيين (النشاط الشرائي ونمط السيولة) للعرض التفاعلي السلس.</p>
+            <div style="margin-top: 1rem; font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-muted);">Var: 41.8% + 20.0%</div>
+          </div>
+        </div>
+
+        <div class="code-diagram">
++---------------------------------------------------------------------------------------------------------------+
+| RAW INPUT (8,950 Rows) -> Median Impute -> Log1p Transform -> StandardScaler -> K-Means (K=5) & DBSCAN (eps=1.5)|
+| Edge Manifest Pre-compilation -> JSON Centroids & Core Point Manifest (0ms Latency on Browser)                 |
++---------------------------------------------------------------------------------------------------------------+
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 05: THE 5 COHORTS OVERVIEW ==================== -->
+    <section class="slide" id="slide-5" data-slide="5">
+      <div class="slide-header">
+        <div>
+          <span class="category-tag" data-en="PORTFOLIO SEGMENTATION DISCOVERY" data-ar="خريطة الشرائح السلوكية الخمس">خريطة الشرائح السلوكية الخمس</span>
+          <h2 class="slide-title" data-en="Customer Persona Playbook" data-ar="دليل شخصيات العملاء المكتشفة">دليل شخصيات العملاء المكتشفة</h2>
+          <p class="slide-subtitle" data-en="Comprehensive Behavioral Breakdown of 8,950 Cardholders Discovered by the Clustering Engine." data-ar="تفصيل إحصائي دقيق للشخصيات الخمس المكتشفة في المحفظة بواسطة خوارزمية التجميع العنقودي.">تفصيل إحصائي دقيق للشخصيات الخمس المكتشفة في المحفظة بواسطة خوارزمية التجميع العنقودي.</p>
+        </div>
+      </div>
+
+      <div class="slide-body">
+        <table class="deck-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th data-en="Segment Persona" data-ar="الشريحة السلوكية">الشريحة السلوكية</th>
+              <th data-en="Share" data-ar="النسبة">النسبة</th>
+              <th data-en="Avg Balance" data-ar="متوسط الرصيد">متوسط الرصيد</th>
+              <th data-en="Purchases" data-ar="المشتريات">المشتريات</th>
+              <th data-en="Cash Advance" data-ar="السحب النقدي">السحب النقدي</th>
+              <th data-en="Strategic Action" data-ar="الإجراء الاستراتيجي الموصى به">الإجراء الاستراتيجي الموصى به</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="cohort-badge" style="background: rgba(56, 189, 248, 0.2); color: var(--accent-blue);">0</span></td>
+              <td style="font-weight: 700;" data-en="High-Limit Active Borrowers" data-ar="مقترضون نشطون بحد ائتماني مرتفع">مقترضون نشطون بحد ائتماني مرتفع</td>
+              <td style="font-family: var(--font-en); font-weight: 700; color: var(--accent-blue);">17.8% <span style="font-size: 0.8rem; color: var(--text-muted);">(1,589)</span></td>
+              <td>$2,585</td>
+              <td>$1,260</td>
+              <td style="color: var(--accent-amber); font-weight: 700;">$1,658</td>
+              <td data-en="Balance transfer promos & credit limit extension." data-ar="عروض تحويل الرصيد بفائدة تفضيلية ورفع الحد الائتماني.">عروض تحويل الرصيد بفائدة تفضيلية ورفع الحد الائتماني.</td>
+            </tr>
+            <tr>
+              <td><span class="cohort-badge" style="background: rgba(148, 163, 184, 0.2); color: #cbd5e1;">1</span></td>
+              <td style="font-weight: 700;" data-en="Inactive / Dormant Accounts" data-ar="حسابات خاملة ومنخفضة التفاعل">حسابات خاملة ومنخفضة التفاعل</td>
+              <td style="font-family: var(--font-en); font-weight: 700; color: #cbd5e1;">12.8% <span style="font-size: 0.8rem; color: var(--text-muted);">(1,150)</span></td>
+              <td>$117</td>
+              <td>$260</td>
+              <td>$75</td>
+              <td data-en="Reactivation cashback & annual fee waiver triggers." data-ar="حملات استعادة التنشيط، كاش باك على أول عملية، وإعفاء الرسوم.">حملات استعادة التنشيط، كاش باك على أول عملية، وإعفاء الرسوم.</td>
+            </tr>
+            <tr>
+              <td><span class="cohort-badge" style="background: rgba(52, 211, 153, 0.2); color: var(--accent-emerald);">2</span></td>
+              <td style="font-weight: 700;" data-en="Disciplined Transactors (VIP)" data-ar="عملاء متميزون ومنتظمو السداد (VIP)">عملاء متميزون ومنتظمو السداد (VIP)</td>
+              <td style="font-family: var(--font-en); font-weight: 700; color: var(--accent-emerald);">20.4% <span style="font-size: 0.8rem; color: var(--text-muted);">(1,828)</span></td>
+              <td>$181</td>
+              <td style="color: var(--accent-emerald); font-weight: 700;">$1,150</td>
+              <td>$40</td>
+              <td data-en="Premium rewards, airport lounge & elite merchant perks." data-ar="برامج ولاء نخبوية، ترقية البطاقة لبلاتينيوم، ودخول صالات المطار.">برامج ولاء نخبوية، ترقية البطاقة لبلاتينيوم، ودخول صالات المطار.</td>
+            </tr>
+            <tr>
+              <td><span class="cohort-badge" style="background: rgba(251, 191, 36, 0.2); color: var(--accent-amber);">3</span></td>
+              <td style="font-weight: 700;" data-en="Cash Advance Reliant" data-ar="معتمدون بالكامل على السحب النقدي">معتمدون بالكامل على السحب النقدي</td>
+              <td style="font-family: var(--font-en); font-weight: 700; color: var(--accent-amber);">25.3% <span style="font-size: 0.8rem; color: var(--text-muted);">(2,260)</span></td>
+              <td>$2,028</td>
+              <td>$17</td>
+              <td style="color: var(--accent-rose); font-weight: 700;">$1,850</td>
+              <td data-en="Personal loan conversion & structured debt plans." data-ar="تحويل رصيد السحب إلى قروض شخصية مجدولة لتفادي التعثر.">تحويل رصيد السحب إلى قروض شخصية مجدولة لتفادي التعثر.</td>
+            </tr>
+            <tr>
+              <td><span class="cohort-badge" style="background: rgba(192, 132, 252, 0.2); color: var(--accent-purple);">4</span></td>
+              <td style="font-weight: 700;" data-en="Revolving Balance Shoppers" data-ar="متسوقون دائمو التدوير للرصيد">متسوقون دائمو التدوير للرصيد</td>
+              <td style="font-family: var(--font-en); font-weight: 700; color: var(--accent-purple);">23.7% <span style="font-size: 0.8rem; color: var(--text-muted);">(2,123)</span></td>
+              <td>$1,420</td>
+              <td style="color: var(--accent-purple); font-weight: 700;">$1,152</td>
+              <td>$110</td>
+              <td data-en="0% interest installment plans & merchant partnerships." data-ar="خطط تقسيط ميسرة بفائدة 0% وشراكات مع المتاجر الكبرى.">خطط تقسيط ميسرة بفائدة 0% وشراكات مع المتاجر الكبرى.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 06: HIGH-VALUE PERSONAS ==================== -->
+    <section class="slide" id="slide-6" data-slide="6">
+      <div class="slide-header">
+        <div>
+          <span class="category-tag" data-en="GROWTH & MARGIN EXPANSION" data-ar="محركات الربحية والنمو">محركات الربحية والنمو</span>
+          <h2 class="slide-title" data-en="High-Value Persona Deep Dive" data-ar="التحليل المعمق لشرائح القيمة العالية">التحليل المعمق لشرائح القيمة العالية</h2>
+          <p class="slide-subtitle" data-en="Monetizing Cohort 0 (Active Borrowers) & Retaining Cohort 2 (Disciplined VIP Transactors)." data-ar="تعظيم هوامش الربح من الشريحة 0 (المقترضون النشطون) وحماية ولاء الشريحة 2 (عملاء VIP).">تعظيم هوامش الربح من الشريحة 0 (المقترضون النشطون) وحماية ولاء الشريحة 2 (عملاء VIP).</p>
+        </div>
+      </div>
+
+      <div class="slide-body">
+        <div class="grid-2">
+          <!-- Cohort 0 -->
+          <div class="glass-card card-glow-blue">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+              <div>
+                <span class="cohort-badge" style="background: rgba(56, 189, 248, 0.2); color: var(--accent-blue); margin-bottom: 0.5rem;">0</span>
+                <h3 style="font-size: 1.4rem; font-weight: 800;" data-en="High-Limit Active Borrowers" data-ar="المقترضون النشطون (حد ائتماني مرتفع)">المقترضون النشطون (حد ائتماني مرتفع)</h3>
+                <span style="font-size: 0.85rem; color: var(--accent-blue); font-weight: 700;">17.8% of Portfolio • Top Interest Contributors</span>
+              </div>
+              <div style="text-align: right; font-family: var(--font-en);">
+                <div style="font-size: 1.6rem; font-weight: 800; color: #ffffff;">$5,445</div>
+                <div style="font-size: 0.75rem; color: var(--text-muted);" data-en="Avg Credit Limit" data-ar="متوسط الحد">متوسط الحد</div>
+              </div>
+            </div>
+
+            <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6; margin-bottom: 1.25rem;" data-en="These cardholders maintain heavy revolving balances ($2,585 avg) while simultaneously spending heavily on retail and taking ATM advances. They are the single highest margin drivers in retail credit." data-ar="يحمل هؤلاء العملاء أرصدة مدينة متجددة مرتفعة مع استمرارهم في الشراء والسحب النقدي بالتوازي. يمثلون المصدر الأول للعائد المالي من الفوائد ورسوم الخدمات.">يحمل هؤلاء العملاء أرصدة مدينة متجددة مرتفعة مع استمرارهم في الشراء والسحب النقدي بالتوازي. يمثلون المصدر الأول للعائد المالي من الفوائد ورسوم الخدمات.</p>
+
+            <div style="background: rgba(0, 0, 0, 0.3); border-radius: 0.75rem; padding: 1rem; border-right: 3px solid var(--accent-blue);">
+              <h5 style="color: var(--accent-blue); font-size: 0.85rem; margin-bottom: 0.35rem;" data-en="Strategic Marketing Playbook" data-ar="خطة العمل المصرفية">خطة العمل المصرفية</h5>
+              <ul style="font-size: 0.85rem; color: #ffffff; line-height: 1.6; padding-right: 1.2rem;">
+                <li data-en="Proactive credit limit increases by 15-25% based on liquidity health." data-ar="رفع استباقي للحد الائتماني بنسبة 15-25% بناءً على تدفقاتهم المالية.">رفع استباقي للحد الائتماني بنسبة 15-25% بناءً على تدفقاتهم المالية.</li>
+                <li data-en="Low-rate balance transfer packages to capture outside banking debt." data-ar="عروض شراء مديونيات البنوك المنافسة بأسعار فائدة تفضيلية.">عروض شراء مديونيات البنوك المنافسة بأسعار فائدة تفضيلية.</li>
+                <li data-en="Automated liquidity protection insurance." data-ar="إتاحة خدمات التأمين التلقائي على سداد المديونية في حالات الطوارئ.">إتاحة خدمات التأمين التلقائي على سداد المديونية في حالات الطوارئ.</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Cohort 2 -->
+          <div class="glass-card card-glow-emerald">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+              <div>
+                <span class="cohort-badge" style="background: rgba(52, 211, 153, 0.2); color: var(--accent-emerald); margin-bottom: 0.5rem;">2</span>
+                <h3 style="font-size: 1.4rem; font-weight: 800;" data-en="Disciplined Transactors (VIP)" data-ar="عملاء النخبة المنتظمون (VIP)">عملاء النخبة المنتظمون (VIP)</h3>
+                <span style="font-size: 0.85rem; color: var(--accent-emerald); font-weight: 700;">20.4% of Portfolio • Zero Default Risk</span>
+              </div>
+              <div style="text-align: right; font-family: var(--font-en);">
+                <div style="font-size: 1.6rem; font-weight: 800; color: #ffffff;">32.0%</div>
+                <div style="font-size: 0.75rem; color: var(--text-muted);" data-en="Full Payment Rate" data-ar="معدل السداد الكامل">معدل السداد الكامل</div>
+              </div>
+            </div>
+
+            <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6; margin-bottom: 1.25rem;" data-en="Premium cardholders who purchase heavily ($1,150/mo) but settle invoices in full, avoiding revolving fees. They generate interchange swipe income and hold immense wealth management potential." data-ar="عملاء ذوو ملاءة مالية ممتازة، ينفقون بكثافة عبر البطاقة ولكنهم يسددون الفواتير بالكامل شهرياً. يدرون عوائد ضخمة من رسوم التاجر ويمثلون فرصة ممتازة لإدارة الثروات.">عملاء ذوو ملاءة مالية ممتازة، ينفقون بكثافة عبر البطاقة ولكنهم يسددون الفواتير بالكامل شهرياً. يدرون عوائد ضخمة من رسوم التاجر ويمثلون فرصة ممتازة لإدارة الثروات.</p>
+
+            <div style="background: rgba(0, 0, 0, 0.3); border-radius: 0.75rem; padding: 1rem; border-right: 3px solid var(--accent-emerald);">
+              <h5 style="color: var(--accent-emerald); font-size: 0.85rem; margin-bottom: 0.35rem;" data-en="Strategic Marketing Playbook" data-ar="خطة العمل المصرفية">خطة العمل المصرفية</h5>
+              <ul style="font-size: 0.85rem; color: #ffffff; line-height: 1.6; padding-right: 1.2rem;">
+                <li data-en="Immediate upgrade to Platinum / World Elite card tier." data-ar="ترقية فورية إلى باقات البطاقات البلاتينية وبطاقات النخبة العالمية.">ترقية فورية إلى باقات البطاقات البلاتينية وبطاقات النخبة العالمية.</li>
+                <li data-en="Cross-selling Wealth Management and High-Yield Certificate products." data-ar="تسويق منتجات إدارة الثروات والشهادات الادخارية المتميزة لهم.">تسويق منتجات إدارة الثروات والشهادات الادخارية المتميزة لهم.</li>
+                <li data-en="Exclusive co-branded airline miles and concierge services." data-ar="شراكات حصرية لأميال الطيران، حجوزات الفنادق، وخدمات الكونسيرج.">شراكات حصرية لأميال الطيران، حجوزات الفنادق، وخدمات الكونسيرج.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 07: MASS & RISK SEGMENTS ==================== -->
+    <section class="slide" id="slide-7" data-slide="7">
+      <div class="slide-header">
+        <div>
+          <span class="category-tag" data-en="RETENTION & DEFAULT PREVENTION" data-ar="تنشيط الحسابات والوقاية من التعثر">تنشيط الحسابات والوقاية من التعثر</span>
+          <h2 class="slide-title" data-en="Mass & Vulnerable Cohorts Playbook" data-ar="إدارة الشرائح الجماهيرية والمعرضة للمخاطر">إدارة الشرائح الجماهيرية والمعرضة للمخاطر</h2>
+          <p class="slide-subtitle" data-en="Re-engaging Dormants (Cohort 1), Restructuring Cash-Dependents (Cohort 3), and Partnering on Installments (Cohort 4)." data-ar="استراتيجيات استعادة الحسابات الخاملة، وإعادة هيكلة ديون عملاء الكاش، وتفعيل التقسيط للمتسوقين.">استراتيجيات استعادة الحسابات الخاملة، وإعادة هيكلة ديون عملاء الكاش، وتفعيل التقسيط للمتسوقين.</p>
+        </div>
+      </div>
+
+      <div class="slide-body">
+        <div class="grid-3">
+          <!-- Cohort 1 -->
+          <div class="glass-card card-glow-indigo">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+              <span class="cohort-badge" style="background: rgba(148, 163, 184, 0.2); color: #cbd5e1;">1</span>
+              <span style="font-size: 0.8rem; font-weight: 700; color: #cbd5e1;">12.8% • DORMANT</span>
+            </div>
+            <h4 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 0.5rem;" data-en="Inactive / Dormant" data-ar="الحسابات الخاملة">الحسابات الخاملة</h4>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 1rem;" data-en="Balance: $117. Purchases: $260. Minimal monthly engagement. Cards sit unused in wallets, eroding annual fee retention." data-ar="متوسط رصيد 117$ ومشتريات 260$. البطاقات مهملة في المحافظ وتكلف البنك رسوم تشغيل سنوية دون عائد فعلي.">متوسط رصيد 117$ ومشتريات 260$. البطاقات مهملة في المحافظ وتكلف البنك رسوم تشغيل سنوية دون عائد فعلي.</p>
+            <div style="background: rgba(0,0,0,0.3); padding: 0.75rem; border-radius: 6px; font-size: 0.82rem; color: #cbd5e1;">
+              <strong>Campaign:</strong> $20 cashback upon 3 consecutive merchant swipes + annual fee waiver.
+            </div>
+          </div>
+
+          <!-- Cohort 3 -->
+          <div class="glass-card card-glow-amber">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+              <span class="cohort-badge" style="background: rgba(251, 191, 36, 0.2); color: var(--accent-amber);">3</span>
+              <span style="font-size: 0.8rem; font-weight: 700; color: var(--accent-amber);">25.3% • LIQUIDITY RISK</span>
+            </div>
+            <h4 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 0.5rem;" data-en="Cash Advance Reliant" data-ar="المعتمدون على السحب النقدي">المعتمدون على السحب النقدي</h4>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 1rem;" data-en="Balance: $2,028. Purchases: $17.5. High ATM reliance ($1,850). Using credit card as an emergency payday lender. Highest early default correlation." data-ar="رصيد 2,028$، مشتريات شبه منعدمة (17$)، وسحب نقدي يصل لـ 1,850$. استخدام البطاقة كقرض طوارئ ينذر بارتفاع مخاطر التعثر.">رصيد 2,028$، مشتريات شبه منعدمة (17$)، وسحب نقدي يصل لـ 1,850$. استخدام البطاقة كقرض طوارئ ينذر بارتفاع مخاطر التعثر.</p>
+            <div style="background: rgba(0,0,0,0.3); padding: 0.75rem; border-radius: 6px; font-size: 0.82rem; color: var(--accent-amber);">
+              <strong>Intervention:</strong> Automated conversion into 24-month fixed personal installment loan to lock in repayment.
+            </div>
+          </div>
+
+          <!-- Cohort 4 -->
+          <div class="glass-card card-glow-purple">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+              <span class="cohort-badge" style="background: rgba(192, 132, 252, 0.2); color: var(--accent-purple);">4</span>
+              <span style="font-size: 0.8rem; font-weight: 700; color: var(--accent-purple);">23.7% • REVOLVING SHOPPERS</span>
+            </div>
+            <h4 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 0.5rem;" data-en="Revolving Shoppers" data-ar="المتسوقون بالتقسيط والتدوير">المتسوقون بالتقسيط والتدوير</h4>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 1rem;" data-en="Balance: $1,420. Purchases: $1,152. Regular retail shopping combined with active month-to-month revolving balance carryovers." data-ar="رصيد 1,420$ ومشتريات 1,152$. نشاط شرائي ممتاز ومتكرر مع تدوير جزء من الرصيد شهرياً ودفع فوائد مستمرة للبنك.">رصيد 1,420$ ومشتريات 1,152$. نشاط شرائي ممتاز ومتكرر مع تدوير جزء من الرصيد شهرياً ودفع فوائد مستمرة للبنك.</p>
+            <div style="background: rgba(0,0,0,0.3); padding: 0.75rem; border-radius: 6px; font-size: 0.82rem; color: var(--accent-purple);">
+              <strong>Growth Play:</strong> Merchant 0% Buy-Now-Pay-Later offers & smart automated credit utilization SMS alerts.
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card" style="background: rgba(15, 23, 42, 0.5); padding: 1rem 1.75rem; display: flex; justify-content: space-between; align-items: center;">
+          <span style="color: var(--text-secondary); font-size: 0.9rem;" data-en="Together, Cohorts 1, 3, and 4 represent 61.8% of cardholders — the bulk of operational portfolio balance." data-ar="تمثل الشرائح (1 و 3 و 4) مجتمعة 61.8% من إجمالي عدد العملاء — وهي الكتلة الأكبر من أرصدة المحفظة التشغيلية.">تمثل الشرائح (1 و 3 و 4) مجتمعة 61.8% من إجمالي عدد العملاء — وهي الكتلة الأكبر من أرصدة المحفظة التشغيلية.</span>
+          <span style="font-weight: 700; color: var(--accent-emerald);" data-en="Estimated Recovery: +$14.2M Margin" data-ar="العائد المستهدف: استرداد 14.2 مليون دولار">العائد المستهدف: استرداد 14.2 مليون دولار</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 08: ANOMALY DEFENSE (DBSCAN) ==================== -->
+    <section class="slide" id="slide-8" data-slide="8">
+      <div class="slide-header">
+        <div>
+          <span class="category-tag" data-en="PROACTIVE RISK CONTAINMENT" data-ar="الحماية الاستباقية وإدارة المخاطر">الحماية الاستباقية وإدارة المخاطر</span>
+          <h2 class="slide-title" data-en="Behavioral Anomaly Defense Engine" data-ar="محرك كشف الشذوذ والمخاطر السلوكية">محرك كشف الشذوذ والمخاطر السلوكية</h2>
+          <p class="slide-subtitle" data-en="Isolating 3.8% Extreme Portfolio Anomalies (342 Accounts) via Unsupervised Spatial Density." data-ar="عزل 3.8% من الحسابات ذات السلوك المالي الشاذ (342 عميلاً) عبر تحليل الكثافة الفضائية بدون تصنيفات مسبقة.">عزل 3.8% من الحسابات ذات السلوك المالي الشاذ (342 عميلاً) عبر تحليل الكثافة الفضائية بدون تصنيفات مسبقة.</p>
+        </div>
+      </div>
+
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="glass-card card-glow-rose">
+            <h3 style="color: var(--accent-rose); font-size: 1.3rem; margin-bottom: 0.75rem;" data-en="How DBSCAN Density Scanning Works" data-ar="كيف تعمل تقنية مسح الكثافة DBSCAN">كيف تعمل تقنية مسح الكثافة DBSCAN</h3>
+            <p style="color: var(--text-secondary); line-height: 1.6; font-size: 0.95rem; margin-bottom: 1rem;" data-en="Traditional anomaly detection relies on historical fraud labels which fail on novel fraud schemes. Our engine examines multidimensional core point envelopes (radius ε = 1.5). If a cardholder falls outside all cluster cores, they are flagged as an Anomaly (Noise)." data-ar="تعتمد أنظمة الاحتيال التقليدية على سجلات المخالفات السابقة التي تفشل أمام الحيل الجديدة. يفحص محركنا المسافة الإقليدية للعميل مقارنة بجميع النقاط المحورية؛ فإذا تجاوزت المسافة 1.5، يُصنف فوراً كحالة استثنائية مشبوهة.">تعتمد أنظمة الاحتيال التقليدية على سجلات المخالفات السابقة التي تفشل أمام الحيل الجديدة. يفحص محركنا المسافة الإقليدية للعميل مقارنة بجميع النقاط المحورية؛ فإذا تجاوزت المسافة 1.5، يُصنف فوراً كحالة استثنائية مشبوهة.</p>
+
+            <div style="background: rgba(0, 0, 0, 0.4); border-radius: 0.75rem; padding: 1rem; font-family: var(--font-mono); font-size: 0.85rem; color: #f43f5e;">
+              dist(x, CorePoints) = min ||x - c||₂<br>
+              IF dist &gt; ε (1.5) &rarr; FLAG AS BEHAVIORAL ANOMALY
+            </div>
+          </div>
+
+          <div class="glass-card card-glow-amber">
+            <h3 style="color: var(--accent-amber); font-size: 1.3rem; margin-bottom: 0.75rem;" data-en="Discovered Real-World Anomaly Profiles" data-ar="أنماط الشذوذ الحقيقية المكتشفة في المحفظة">أنماط الشذوذ الحقيقية المكتشفة في المحفظة</h3>
+            <div style="display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.9rem;">
+              <div style="padding: 0.75rem; background: rgba(0,0,0,0.3); border-radius: 6px; border-right: 3px solid var(--accent-rose);">
+                <strong style="color: #ffffff;">Extreme ATM Surge:</strong>
+                <span style="color: var(--text-secondary);">Accounts pulling &gt;$40,000 cash in under 30 days while registering $0 in retail purchases.</span>
+              </div>
+              <div style="padding: 0.75rem; background: rgba(0,0,0,0.3); border-radius: 6px; border-right: 3px solid var(--accent-amber);">
+                <strong style="color: #ffffff;">Ultra-High Velocity Whales:</strong>
+                <span style="color: var(--text-secondary);">Spending &gt;50x the portfolio median with sudden zero-payment balance carryovers.</span>
+              </div>
+              <div style="padding: 0.75rem; background: rgba(0,0,0,0.3); border-radius: 6px; border-right: 3px solid var(--accent-blue);">
+                <strong style="color: #ffffff;">Synthetic Credit Utilization:</strong>
+                <span style="color: var(--text-secondary);">Accounts maintaining &gt;150% credit utilization due to accumulated overlimit penalties.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card" style="display: flex; justify-content: space-between; align-items: center; background: rgba(244, 63, 94, 0.08); border-color: rgba(244, 63, 94, 0.3); padding: 1.25rem 2rem;">
+          <div>
+            <h4 style="color: #ffffff; font-size: 1.1rem;" data-en="Immediate Operational Benefit" data-ar="الأثر المباشر على الحماية وإدارة المخاطر">الأثر المباشر على الحماية وإدارة المخاطر</h4>
+            <p style="color: var(--text-secondary); font-size: 0.9rem;" data-en="Reduces risk team false-alarm triage by 65% while catching zero-day anomalies days before credit rating agencies update." data-ar="خفض الإنذارات الخاطئة بنسبة 65% وتنبيه فرق إدارة الائتمان قبل أيام من انعكاس التعثر على التقارير الائتمانية الرسمية.">خفض الإنذارات الخاطئة بنسبة 65% وتنبيه فرق إدارة الائتمان قبل أيام من انعكاس التعثر على التقارير الائتمانية الرسمية.</p>
+          </div>
+          <div style="font-family: var(--font-en); font-size: 2.2rem; font-weight: 800; color: var(--accent-rose);">
+            342 <span style="font-size: 0.85rem; color: var(--text-secondary); display: block;">Accounts Quarantined</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 09: EDGE AI ARCHITECTURE ==================== -->
+    <section class="slide" id="slide-9" data-slide="9">
+      <div class="slide-header">
+        <div>
+          <span class="category-tag" data-en="ENTERPRISE CYBERSECURITY & PERFORMANCE" data-ar="الأمان السيبراني والأداء الفائق">الأمان السيبراني والأداء الفائق</span>
+          <h2 class="slide-title" data-en="Client-Side Edge AI Architecture" data-ar="معمارية الذكاء الاصطناعي الطرفي (Edge AI)">معمارية الذكاء الاصطناعي الطرفي (Edge AI)</h2>
+          <p class="slide-subtitle" data-en="Zero PII Data Egress, 0ms Network Latency, and $0 Recurring Cloud GPU Server Costs." data-ar="حماية كاملة لخصوصية العملاء، انعدام التأخير الزمني، وتوفير 100% من تكاليف خوادم الاستدلال السحابية.">حماية كاملة لخصوصية العملاء، انعدام التأخير الزمني، وتوفير 100% من تكاليف خوادم الاستدلال السحابية.</p>
+        </div>
+      </div>
+
+      <div class="slide-body">
+        <div class="grid-2">
+          <!-- Traditional Cloud AI -->
+          <div class="glass-card" style="border-color: rgba(244, 63, 94, 0.3);">
+            <div style="font-size: 0.85rem; font-weight: 700; color: var(--accent-rose); margin-bottom: 0.5rem;" data-en="TRADITIONAL CLOUD ARCHITECTURE" data-ar="الأنظمة السحابية التقليدية">الأنظمة السحابية التقليدية</div>
+            <div class="code-diagram" style="color: #f87171; margin-bottom: 1rem; font-size: 0.78rem;">
+[Bank Branch / Client Browser]
+             │  (Transmits Sensitive PII, Credit Limit & Balances)
+             ▼
+   [Public Cloud API Server]  <-- Security Vulnerability & High Latency
+             │  (200ms - 800ms Network Roundtrip)
+             ▼
+   [Cloud Inference Cluster]  <-- Recurring Monthly GPU Server Bills ($$$)
+            </div>
+            <ul style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; padding-right: 1.2rem;">
+              <li data-en="Severe regulatory compliance risk (GDPR / PCI-DSS data breaches)." data-ar="مخاطر اختراق وتسريب بيانات البطاقات الحساسة ومخالفة معايير PCI-DSS.">مخاطر اختراق وتسريب بيانات البطاقات الحساسة ومخالفة معايير PCI-DSS.</li>
+              <li data-en="Dependent on persistent internet connection & server uptime." data-ar="توقف كامل للنظام عند انقطاع الإنترنت أو تعطل الخوادم المركزية.">توقف كامل للنظام عند انقطاع الإنترنت أو تعطل الخوادم المركزية.</li>
+              <li data-en="High infrastructure scaling costs as customer portfolio expands." data-ar="ارتفاع متواصل في فواتير الخوادم والـ GPUs مع نمو عدد العملاء.">ارتفاع متواصل في فواتير الخوادم والـ GPUs مع نمو عدد العملاء.</li>
+            </ul>
+          </div>
+
+          <!-- Our Edge Architecture -->
+          <div class="glass-card" style="border-color: rgba(52, 211, 153, 0.4); background: rgba(52, 211, 153, 0.04);">
+            <div style="font-size: 0.85rem; font-weight: 700; color: var(--accent-emerald); margin-bottom: 0.5rem;" data-en="OUR ENTERPRISE EDGE AI FRAMEWORK" data-ar="هندستنا المبتكرة عبر Edge AI">هندستنا المبتكرة عبر Edge AI</div>
+            <div class="code-diagram" style="color: #34d399; margin-bottom: 1rem; font-size: 0.78rem;">
+[Pre-compiled Manifest JSON] (Centroids, Scalers, Core Coordinates)
+             │  (Loaded once at startup: 2.1 MB total footprint)
+             ▼
+[Client-Side Browser Worker]  <-- Vectorized In-Memory Inference (<1ms)
+             │  (100% Data Privacy: ZERO PII leaves device)
+             ▼
+[Executive Front-Office UI]   <-- Real-time 120 FPS Dashboard
+            </div>
+            <ul style="font-size: 0.85rem; color: #ffffff; line-height: 1.6; padding-right: 1.2rem;">
+              <li data-en="100% Compliant: Customer data is processed directly in browser RAM." data-ar="توافق تام مع معايير الأمان: المعالجة تتم فوراً في ذاكرة المتصفح دون إرسال للخارج.">توافق تام مع معايير الأمان: المعالجة تتم فوراً في ذاكرة المتصفح دون إرسال للخارج.</li>
+              <li data-en="0ms API latency: Instantaneous predictions as sliders move." data-ar="استجابة فورية 0 ملي ثانية: تحديث لحظي للتصنيف مع تحريك المؤشرات.">استجابة فورية 0 ملي ثانية: تحديث لحظي للتصنيف مع تحريك المؤشرات.</li>
+              <li data-en="$0 Cloud GPU costs: Infinite horizontal scalability at zero incremental expense." data-ar="تكلفة خوادم صفرية: قدرة على فحص ملايين العملاء دون أي تكلفة إضافية.">تكلفة خوادم صفرية: قدرة على فحص ملايين العملاء دون أي تكلفة إضافية.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 10: FRONT-OFFICE PRODUCT SUITE ==================== -->
+    <section class="slide" id="slide-10" data-slide="10">
+      <div class="slide-header">
+        <div>
+          <span class="category-tag" data-en="COMMERCIAL FRONT-OFFICE EXPERIENCE" data-ar="واجهات الاستخدام للقطاع التجاري">واجهات الاستخدام للقطاع التجاري</span>
+          <h2 class="slide-title" data-en="The Enterprise Application Suite" data-ar="منظومة التطبيقات المصرفية المكتملة">منظومة التطبيقات المصرفية المكتملة</h2>
+          <p class="slide-subtitle" data-en="Four Front-Office Modules Built for Relationship Managers, Data Scientists, and Risk Officers." data-ar="أربع أدوات متكاملة صُممت لمدراء العلاقات البنكية وعلماء البيانات ومسؤولي إدارة المخاطر.">أربع أدوات متكاملة صُممت لمدراء العلاقات البنكية وعلماء البيانات ومسؤولي إدارة المخاطر.</p>
+        </div>
+      </div>
+
+      <div class="slide-body">
+        <div class="grid-4">
+          <div class="glass-card card-glow-blue">
+            <div style="font-size: 2rem; margin-bottom: 0.5rem;">🎯</div>
+            <h4 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 0.5rem;" data-en="1. Customer Profiler" data-ar="1. فاحص شخصية العميل">1. فاحص شخصية العميل</h4>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5;" data-en="Interactive financial sliders and 1-click executive presets. Calculates financial health gauge (0-100), cluster assignment, and tailored next-best-action." data-ar="مؤشرات تفاعلية ونماذج جاهزة بنقرة واحدة. يحسب مؤشر الصحة الائتمانية (0-100) ويصدر التوصية التسويقية المناسبة فوراً.">مؤشرات تفاعلية ونماذج جاهزة بنقرة واحدة. يحسب مؤشر الصحة الائتمانية (0-100) ويصدر التوصية التسويقية المناسبة فوراً.</p>
+          </div>
+
+          <div class="glass-card card-glow-indigo">
+            <div style="font-size: 2rem; margin-bottom: 0.5rem;">👥</div>
+            <h4 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 0.5rem;" data-en="2. Segments Playbook" data-ar="2. دليل الشرائح الاستراتيجي">2. دليل الشرائح الاستراتيجي</h4>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5;" data-en="Portfolio-wide demographic breakdown. Visualizes average balances, retail velocity, cash-advance reliance, and tailored commercial campaigns." data-ar="استعراض شامل لجميع شرائح المحفظة الائتمانية مع تفصيل متوسطات الأرصدة والإنفاق والخطط التسويقية المخصصة لكل شريحة.">استعراض شامل لجميع شرائح المحفظة الائتمانية مع تفصيل متوسطات الأرصدة والإنفاق والخطط التسويقية المخصصة لكل شريحة.</p>
+          </div>
+
+          <div class="glass-card card-glow-purple">
+            <div style="font-size: 2rem; margin-bottom: 0.5rem;">📊</div>
+            <h4 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 0.5rem;" data-en="3. 2D Visual Landscape" data-ar="3. الخريطة البصرية (PCA)">3. الخريطة البصرية (PCA)</h4>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5;" data-en="High-performance HTML5 Canvas rendering all 8,950 accounts along PC1 and PC2. Real-time hover tooltips, centroid coordinates, and anomaly crosshairs." data-ar="عرض تفاعلي عبر Canvas لـ 8,950 عميلاً على محوري النشاط والسيولة مع تظليل مراكز الشرائح والأنماط الشاذة باللون الأحمر.">عرض تفاعلي عبر Canvas لـ 8,950 عميلاً على محوري النشاط والسيولة مع تظليل مراكز الشرائح والأنماط الشاذة باللون الأحمر.</p>
+          </div>
+
+          <div class="glass-card card-glow-emerald">
+            <div style="font-size: 2rem; margin-bottom: 0.5rem;">📁</div>
+            <h4 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 0.5rem;" data-en="4. Batch CSV Scanner" data-ar="4. ماسح الملفات الجماعي">4. ماسح الملفات الجماعي</h4>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5;" data-en="Drag-and-drop batch ingestion. Classifies tens of thousands of customer records client-side in seconds with 1-click audit-ready CSV export." data-ar="معالجة مجمعة لملفات الائتمان الضخمة بالسحب والإفلات وتصنيف آلاف السجلات محلياً في ثوانٍ مع تصدير تقارير مفصلة.">معالجة مجمعة لملفات الائتمان الضخمة بالسحب والإفلات وتصنيف آلاف السجلات محلياً في ثوانٍ مع تصدير تقارير مفصلة.</p>
+          </div>
+        </div>
+
+        <div class="glass-card" style="background: rgba(15, 23, 42, 0.6); padding: 1.25rem 2rem; display: flex; justify-content: space-between; align-items: center;">
+          <div style="display: flex; align-items: center; gap: 1.5rem;">
+            <span style="padding: 0.4rem 0.8rem; background: rgba(56, 189, 248, 0.15); color: var(--accent-blue); border-radius: 6px; font-weight: 700; font-size: 0.85rem;">DUAL VIEWPORT</span>
+            <span style="font-size: 0.95rem; color: #ffffff;" data-en="Features instant toggle between Business View (Client-friendly, zero jargon) and Pro View (Centroid vectors, DBSCAN radius diagnostics)." data-ar="يدعم التبديل اللحظي بين وضع الأعمال (لواجهة سهلة ومباشرة للعملاء) والوضع المتقدم (لتشخيص علماء البيانات).">يدعم التبديل اللحظي بين وضع الأعمال (لواجهة سهلة ومباشرة للعملاء) والوضع المتقدم (لتشخيص علماء البيانات).</span>
+          </div>
+          <span style="font-weight: 700; color: var(--accent-emerald);">Live on Vercel Edge</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 11: ROI & FINANCIAL IMPACT ==================== -->
+    <section class="slide" id="slide-11" data-slide="11">
+      <div class="slide-header">
+        <div>
+          <span class="category-tag" data-en="QUANTIFIED BUSINESS IMPACT" data-ar="العائد الاستثماري والأثر المالي">العائد الاستثماري والأثر المالي</span>
+          <h2 class="slide-title" data-en="Financial ROI & Bottom-Line Uplift" data-ar="العائد المالي والأثر على الأرباح">العائد المالي والأثر على الأرباح</h2>
+          <p class="slide-subtitle" data-en="Projected Value Creation Across Marketing Uplift, Credit Loss Mitigation, and Operational Savings." data-ar="القيمة المالية التقديرية عبر رفع كفاءة التسويق، تقليص خسائر التعثر، وتوفير تكاليف التشغيل.">القيمة المالية التقديرية عبر رفع كفاءة التسويق، تقليص خسائر التعثر، وتوفير تكاليف التشغيل.</p>
+        </div>
+      </div>
+
+      <div class="slide-body">
+        <div class="grid-3">
+          <div class="glass-card card-glow-emerald">
+            <div class="metric-value" style="color: var(--accent-emerald)">+28%</div>
+            <div class="metric-label" data-en="Marketing Conversion Uplift" data-ar="زيادة الاستجابة للحملات التسويقية">زيادة الاستجابة للحملات التسويقية</div>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; margin-top: 0.75rem;" data-en="Targeting customers with scientifically matched offers (e.g. balance transfers to Cohort 0, premium perks to Cohort 2) quadruples click-through and uptake rates compared to broad blasts." data-ar="تقديم عروض تتوافق علمياً مع طبيعة العميل يضاعف معدلات التجاوب والتحويل بمقدار 4 أضعاف مقارنة بالحملات العشوائية.">تقديم عروض تتوافق علمياً مع طبيعة العميل يضاعف معدلات التجاوب والتحويل بمقدار 4 أضعاف مقارنة بالحملات العشوائية.</p>
+            <div style="margin-top: 1rem; font-weight: 700; color: #ffffff; font-size: 0.9rem;" data-en="Est. Annual Gain: +$8.4M" data-ar="العائد السنوي المتوقع: +8.4 مليون دولار">العائد السنوي المتوقع: +8.4 مليون دولار</div>
+          </div>
+
+          <div class="glass-card card-glow-rose">
+            <div class="metric-value" style="color: var(--accent-rose)">-15%</div>
+            <div class="metric-label" data-en="Default Risk Loss Reduction" data-ar="تقليص خسائر التعثر والديون المعدومة">تقليص خسائر التعثر والديون المعدومة</div>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; margin-top: 0.75rem;" data-en="Early detection of cash advance surges (Cohort 3) and DBSCAN outlier quarantines (3.8%) allows risk teams to restructure loans weeks prior to catastrophic delinquency." data-ar="الرصد المبكر للاعتماد المفرط على الكاش وعزل الحالات الشاذة يتيح إعادة هيكلة الالتزامات قبل أسابيع من وصول العميل لمرحلة العجز.">الرصد المبكر للاعتماد المفرط على الكاش وعزل الحالات الشاذة يتيح إعادة هيكلة الالتزامات قبل أسابيع من وصول العميل لمرحلة العجز.</p>
+            <div style="margin-top: 1rem; font-weight: 700; color: #ffffff; font-size: 0.9rem;" data-en="Est. Loss Avoidance: +$11.2M" data-ar="الخسائر التي يتم تجنبها: +11.2 مليون دولار">الخسائر التي يتم تجنبها: +11.2 مليون دولار</div>
+          </div>
+
+          <div class="glass-card card-glow-blue">
+            <div class="metric-value" style="color: var(--accent-blue)">99.8%</div>
+            <div class="metric-label" data-en="Analysis Cycle Time Reduction" data-ar="تسريع دورة اتخاذ القرار التحليلي">تسريع دورة اتخاذ القرار التحليلي</div>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; margin-top: 0.75rem;" data-en="Eliminates the 10-day SQL/ETL queue. Relationship managers score new card accounts client-side in under a second with zero reliance on busy central data science queues." data-ar="القضاء التام على فترات الانتظار التي تستغرق أسبوعين؛ حيث يستطيع مدراء الفروع تقييم العملاء في ثوانٍ دون انتظار فرق تحليل البيانات.">القضاء التام على فترات الانتظار التي تستغرق أسبوعين؛ حيث يستطيع مدراء الفروع تقييم العملاء في ثوانٍ دون انتظار فرق تحليل البيانات.</p>
+            <div style="margin-top: 1rem; font-weight: 700; color: #ffffff; font-size: 0.9rem;" data-en="Est. OPEX Savings: +$2.1M" data-ar="التوفير التشغيلي المباشر: +2.1 مليون دولار">التوفير التشغيلي المباشر: +2.1 مليون دولار</div>
+          </div>
+        </div>
+
+        <div class="glass-card" style="border-color: rgba(52, 211, 153, 0.4); background: rgba(52, 211, 153, 0.08); padding: 1.25rem 2rem; display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <h4 style="color: #ffffff; font-size: 1.15rem;" data-en="Cumulative Year-1 Net Economic Value" data-ar="إجمالي القيمة الاقتصادية المضافة (السنة الأولى)">إجمالي القيمة الاقتصادية المضافة (السنة الأولى)</h4>
+            <p style="color: var(--text-secondary); font-size: 0.9rem;" data-en="Based on a typical commercial portfolio of 100,000 active credit accounts." data-ar="محسوبة على محفظة نموذجية بحجم 100,000 بطاقة ائتمانية نشطة.">محسوبة على محفظة نموذجية بحجم 100,000 بطاقة ائتمانية نشطة.</p>
+          </div>
+          <div style="font-family: var(--font-en); font-size: 2.5rem; font-weight: 900; color: var(--accent-emerald);">
+            +$21,700,000
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SLIDE 12: ROADMAP & CLOSING ==================== -->
+    <section class="slide" id="slide-12" data-slide="12">
+      <div class="slide-header">
+        <div>
+          <span class="category-tag" data-en="ENTERPRISE ROLLOUT & CONCLUSION" data-ar="خارطة الطريق والتطبيق العملي">خارطة الطريق والتطبيق العملي</span>
+          <h2 class="slide-title" data-en="Implementation Roadmap & Next Steps" data-ar="مراحل التدشين وخطة العمل التنفيذية">مراحل التدشين وخطة العمل التنفيذية</h2>
+          <p class="slide-subtitle" data-en="A Phased, Low-Risk Integration Plan for Enterprise Core Banking Systems." data-ar="خطة تطبيق متدرجة ومنخفضة المخاطر لدمج النظام مع المنظومة المصرفية الأساسية.">خطة تطبيق متدرجة ومنخفضة المخاطر لدمج النظام مع المنظومة المصرفية الأساسية.</p>
+        </div>
+      </div>
+
+      <div class="slide-body">
+        <div class="grid-4">
+          <div class="glass-card card-glow-blue">
+            <span style="font-size: 0.8rem; font-family: var(--font-mono); color: var(--accent-blue);">PHASE 01 (WEEKS 1-4)</span>
+            <h4 style="font-size: 1.1rem; font-weight: 700; margin: 0.5rem 0;" data-en="Baseline Ingestion" data-ar="المعايرة والبيانات الأولية">المعايرة والبيانات الأولية</h4>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5;" data-en="Ingest bank historical credit logs, calibrate median imputers, log1p scalers, and export production model manifest JSON." data-ar="تغذية النظام بسجلات الائتمان التاريخية، ومعايرة مصفوفات التحويل، واستخراج ملف الأوزان الإنتاجي المعتمد.">تغذية النظام بسجلات الائتمان التاريخية، ومعايرة مصفوفات التحويل، واستخراج ملف الأوزان الإنتاجي المعتمد.</p>
+          </div>
+
+          <div class="glass-card card-glow-indigo">
+            <span style="font-size: 0.8rem; font-family: var(--font-mono); color: var(--accent-indigo);">PHASE 02 (WEEKS 5-8)</span>
+            <h4 style="font-size: 1.1rem; font-weight: 700; margin: 0.5rem 0;" data-en="Front-Office Pilot" data-ar="الإطلاق التجريبي للفروع">الإطلاق التجريبي للفروع</h4>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5;" data-en="Deploy standalone Edge application to top 15 flagship branches. Relationship managers leverage Batch CSV scanner & Customer Profiler." data-ar="تدشين التطبيق الطرفي في أفضل 15 فرعاً رئيسياً لتمكين مدراء العلاقات من فحص العملاء والملفات الجماعية.">تدشين التطبيق الطرفي في أفضل 15 فرعاً رئيسياً لتمكين مدراء العلاقات من فحص العملاء والملفات الجماعية.</p>
+          </div>
+
+          <div class="glass-card card-glow-purple">
+            <span style="font-size: 0.8rem; font-family: var(--font-mono); color: var(--accent-purple);">PHASE 03 (WEEKS 9-12)</span>
+            <h4 style="font-size: 1.1rem; font-weight: 700; margin: 0.5rem 0;" data-en="CRM Automation" data-ar="الأتمتة مع أنظمة الـ CRM">الأتمتة مع أنظمة الـ CRM</h4>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5;" data-en="Automate tailored marketing triggers (SMS, mobile push, email) tied to real-time cluster migrations and anomaly detection alerts." data-ar="ربط مخرجات التصنيف العنقودي بأنظمة إرسال الرسائل وتطبيق الهاتف لإرسال العروض المخصصة وتنبيهات الأمان آلياً.">ربط مخرجات التصنيف العنقودي بأنظمة إرسال الرسائل وتطبيق الهاتف لإرسال العروض المخصصة وتنبيهات الأمان آلياً.</p>
+          </div>
+
+          <div class="glass-card card-glow-emerald">
+            <span style="font-size: 0.8rem; font-family: var(--font-mono); color: var(--accent-emerald);">PHASE 04 (WEEKS 13+)</span>
+            <h4 style="font-size: 1.1rem; font-weight: 700; margin: 0.5rem 0;" data-en="Core Banking API" data-ar="الدمج مع النظام المصرفي الأساسي">الدمج مع النظام المصرفي الأساسي</h4>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5;" data-en="Embed the sub-millisecond edge engine directly into mobile banking apps for instant on-device credit limit decisioning." data-ar="دمج محرك الذكاء الاصطناعي الطرفي داخل تطبيق الهاتف البنكي مباشرة لاتخاذ قرارات رفع الحد الائتماني لحظياً.">دمج محرك الذكاء الاصطناعي الطرفي داخل تطبيق الهاتف البنكي مباشرة لاتخاذ قرارات رفع الحد الائتماني لحظياً.</p>
+          </div>
+        </div>
+
+        <div class="glass-card" style="display: flex; justify-content: space-between; align-items: center; background: rgba(30, 41, 59, 0.7); padding: 1.5rem 2.5rem;">
+          <div>
+            <h3 style="font-size: 1.35rem; color: #ffffff; font-weight: 800;" data-en="Open for Executive Discussion & Q&A" data-ar="جلسة النقاش المفتوح وتلقي الأسئلة">جلسة النقاش المفتوح وتلقي الأسئلة</h3>
+            <p style="font-size: 0.95rem; color: var(--text-secondary);" data-en="Ready to walk through the live interactive platform demo." data-ar="يسعدنا الإجابة عن استفساراتكم وبدء العرض التفاعلي الحي على المنصة.">يسعدنا الإجابة عن استفساراتكم وبدء العرض التفاعلي الحي على المنصة.</p>
+          </div>
+          <div style="display: flex; gap: 1rem;">
+            <a href="https://smart-customer-segmentation-anomaly.vercel.app" target="_blank" class="ctrl-btn" style="background: var(--accent-blue); color: #080c14; border: none; font-weight: 800; text-decoration: none; padding: 0.75rem 1.5rem;">
+              🚀 <span data-en="Launch Live Platform" data-ar="تشغيل المنصة المباشرة">تشغيل المنصة المباشرة</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Bottom Navigation & Counter -->
+  <footer class="deck-nav">
+    <div style="display: flex; align-items: center; gap: 1rem;">
+      <button class="ctrl-btn" onclick="prevSlide()" title="الشريحة السابقة (ArrowLeft / PageUp)">
+        &#8592; <span data-en="Previous" data-ar="السابق">السابق</span>
+      </button>
+      <button class="ctrl-btn" onclick="nextSlide()" title="الشريحة التالية (ArrowRight / Space / PageDown)">
+        <span data-en="Next" data-ar="التالي">التالي</span> &#8594;
+      </button>
+    </div>
+
+    <div class="slide-counter">
+      <span id="current-slide-num">01</span> / <span id="total-slides-num">12</span>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 0.5rem;">
+      <span class="kbd-pill" title="Next / Previous Slide">ARROWS / SPACE</span>
+      <span class="kbd-pill" title="Speaker Notes">S: NOTES</span>
+      <span class="kbd-pill" title="Language Toggle">L: LANG</span>
+      <span class="kbd-pill" title="Fullscreen">F: FULL</span>
+      <span class="kbd-pill" title="Export PDF">P: PDF</span>
+    </div>
+  </footer>
+
+  <!-- Progress Bar Line -->
+  <div class="progress-track">
+    <div class="progress-bar" id="progress-bar"></div>
+  </div>
+
+  <!-- Speaker Notes Drawer (Shown on 'S' key) -->
+  <div id="speaker-notes">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+      <span class="notes-title" data-en="PRESENTER TALKING POINTS (CONFIDENTIAL)" data-ar="نقاط الإلقاء المقترحة للعارض (سرية)">نقاط الإلقاء المقترحة للعارض (سرية)</span>
+      <button onclick="toggleSpeakerNotes()" style="background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1rem;">✕</button>
+    </div>
+    <div class="notes-content" id="notes-content">
+      <!-- Injected via JavaScript based on current slide -->
+    </div>
+  </div>
+
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+    let currentSlide = 0;
+    let currentLang = 'ar'; // Default Arabic, togglable to English
+
+    const speakerNotesData = {
+      ar: [
+        "شريحة 1 (المقدمة): ابدأ بالترحيب بالحضور. ركز على أن هذا النظام ليس مجرد بحث أكاديمي، بل هو منصة إنتاجية عملية جاهزة تفحص 8,950 عميل في أقل من جزء من الألف من الثانية وبدون أي تكلفة خوادم إضافية.",
+        "شريحة 2 (المشكلة): وضح للإدارة التنفيذية أن البنوك تخسر سنوياً ملايين الدولارات بسبب الحملات العشوائية، وأن معظم حالات التعثر لا تحدث فجأة بل تسبقها مؤشرات سلوكية تهملها الأنظمة التقليدية.",
+        "شريحة 3 (الحل الهجين): اشرح الميزة الفريدة: الدمج بين K-Means لتحديد الشريحة التسويقية، و DBSCAN كحائط صد للمخاطر، بحيث يحصل متخذ القرار على الإجراء التجاري ونسبة الأمان في نفس التوقيت.",
+        "شريحة 4 (الهندسة الرياضية): استعرض خطوات تنقية البيانات وتقليص الانحراف بـ Log1p وتوحيد المقاييس، واذكر أن PCA يختزل 56.4% من التباين في بُعدين لتسهيل الرؤية البصرية.",
+        "شريحة 5 (دليل الشرائح الخمس): اشرح بإيجاز توزيع المحفظة: المقترضون النشطون (17.8%)، الخاملون (12.8%)، عملاء VIP (20.4%)، معتمدو الكاش (25.3%)، والمتسوقون بالتقسيط (23.7%).",
+        "شريحة 6 (شرائح القيمة العالية): ركز على الشريحتين الأكثر ربحية: الشريحة 0 التي تولد الفوائد (قدم لهم رفع الحد الائتماني)، والشريحة 2 التي تسدد بالكامل وتدر رسوم نقاط البيع (قدم لهم بطاقات بلاتينية).",
+        "شريحة 7 (الشرائح المعرضة للمخاطر): وضح خطة استعادة الحسابات الخاملة بنقاط كاش باك، وضرورة تحويل عملاء السحب النقدي إلى قروض مجدولة لتفادي التعثر المفاجئ.",
+        "شريحة 8 (كشف الشذوذ والمخاطر): بين للإدارة أن تقنية DBSCAN فضائية ولا تحتاج لبيانات احتيال سابقة؛ فقد عزلت بنجاح 342 عميلاً تجاوزوا الحدود الطبيعية لسحب الكاش والإنفاق.",
+        "شريحة 9 (معمارية Edge AI): نقطة بيع قوية للرؤساء التنفيذيين للمعلومات وأمن البيانات: البيانات المالية لا تغادر جهاز العميل مطلقاً، مما يحقق توافقاً تاماً مع لوائح حماية البيانات وتكلفة سيرفرات $0.",
+        "شريحة 10 (الواجهات التنفيذية): استعرض الأدوات الأربع في المنصة: فحص العميل اللحظي، دليل الشرائح، خريطة PCA، وماسح ملفات CSV الجماعي للملفات الضخمة.",
+        "شريحة 11 (العائد المالي ROI): الرقم الذهبي: أكثر من 21.7 مليون دولار قيمة اقتصادية مضافة عبر +28% زيادة في تحويل العروض، -15% خفض في مخصصات التعثر، وتوفير 99.8% من وقت التحليل.",
+        "شريحة 12 (خطة التنفيذ والنقاش): اختتم بخطة تطبيق متدرجة من 4 مراحل على مدار 12 أسبوعاً، وافتح الباب للأسئلة أو الانتقال للتجربة الحية على المنصة."
+      ],
+      en: [
+        "Slide 1 (Cover): Welcome the executive audience. Emphasize that this is not an academic exercise, but a production-grade front-office platform evaluating 8,950 cardholders at sub-millisecond speeds with zero server GPU overhead.",
+        "Slide 2 (The Problem): Highlight the $42M commercial blindspot. Conventional broad demographic targeting yields <2% conversion, while backward-looking credit scorecards react only after delinquency occurs.",
+        "Slide 3 (Dual-Engine Framework): Articulate the core innovation: combining K-Means for commercial cohort clustering with DBSCAN spatial density estimation as an active risk radar.",
+        "Slide 4 (ML Pipeline): Walk through the mathematical hygiene: median imputation, Log1p skew compression, Z-score standardization, and 2D PCA capturing 56.4% variance.",
+        "Slide 5 (The 5 Personas): Present the full portfolio playbook: Active Borrowers (17.8%), Dormants (12.8%), VIP Transactors (20.4%), Cash Reliant (25.3%), and Revolving Shoppers (23.7%).",
+        "Slide 6 (High-Value Deep Dive): Focus on margin engines: Cohort 0 generates massive interest income (upsell credit lines), while Cohort 2 drives interchange swipe fees (retain with VIP perks).",
+        "Slide 7 (Mass & Risk Cohorts): Explain how cashback triggers reactivate dormants, while proactive installment restructuring protects cash-dependent borrowers from sudden default.",
+        "Slide 8 (Anomaly Defense): Demonstrate how DBSCAN isolates 342 extreme behavioral outliers without requiring historical fraud training datasets.",
+        "Slide 9 (Edge AI Architecture): Major selling point for CIO/CISO: 100% GDPR & PCI-DSS compliance because financial PII stays inside the user's browser memory.",
+        "Slide 10 (Product Suite): Highlight the four integrated tools: Customer Profiler, Cluster Explorer, 2D PCA Visualizer, and the High-Throughput Batch CSV Scanner.",
+        "Slide 11 (Quantified ROI): Emphasize the +$21.7M net value creation (+28% campaign uptake, -15% default loss reduction, 99.8% cycle time reduction).",
+        "Slide 12 (Roadmap & Q&A): Conclude with the 4-phase, 12-week implementation timeline and invite stakeholders to the live platform walkthrough."
+      ]
+    };
+
+    function updateSlide() {
+      slides.forEach((slide, index) => {
+        slide.classList.toggle('active', index === currentSlide);
+      });
+
+      // Update counter
+      document.getElementById('current-slide-num').textContent = String(currentSlide + 1).padStart(2, '0');
+      document.getElementById('total-slides-num').textContent = String(totalSlides).padStart(2, '0');
+
+      // Update progress bar
+      const progressPercent = ((currentSlide + 1) / totalSlides) * 100;
+      document.getElementById('progress-bar').style.width = progressPercent + '%';
+
+      // Update Speaker Notes Content
+      const notes = speakerNotesData[currentLang][currentSlide] || "";
+      document.getElementById('notes-content').textContent = notes;
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides - 1) {
+        currentSlide++;
+        updateSlide();
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 0) {
+        currentSlide--;
+        updateSlide();
+      }
+    }
+
+    function goToSlide(index) {
+      if (index >= 0 && index < totalSlides) {
+        currentSlide = index;
+        updateSlide();
+      }
+    }
+
+    function toggleSpeakerNotes() {
+      const drawer = document.getElementById('speaker-notes');
+      drawer.classList.toggle('open');
+    }
+
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => {
+          console.warn("Fullscreen error: ", err);
+        });
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    }
+
+    function toggleLanguage() {
+      currentLang = currentLang === 'ar' ? 'en' : 'ar';
+      const htmlEl = document.documentElement;
+
+      if (currentLang === 'en') {
+        htmlEl.setAttribute('lang', 'en');
+        htmlEl.setAttribute('dir', 'ltr');
+        document.getElementById('lang-btn-text').textContent = 'العربية';
+      } else {
+        htmlEl.setAttribute('lang', 'ar');
+        htmlEl.setAttribute('dir', 'rtl');
+        document.getElementById('lang-btn-text').textContent = 'English';
+      }
+
+      // Update all translatable elements
+      document.querySelectorAll('[data-en]').forEach(el => {
+        const text = el.getAttribute('data-' + currentLang);
+        if (text) {
+          el.textContent = text;
+        }
+      });
+
+      updateSlide();
+    }
+
+    // Keyboard Navigation
+    window.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+      switch (e.key) {
+        case 'ArrowRight':
+        case ' ':
+        case 'PageDown':
+          e.preventDefault();
+          nextSlide();
+          break;
+        case 'ArrowLeft':
+        case 'PageUp':
+          e.preventDefault();
+          prevSlide();
+          break;
+        case 'Home':
+          e.preventDefault();
+          goToSlide(0);
+          break;
+        case 'End':
+          e.preventDefault();
+          goToSlide(totalSlides - 1);
+          break;
+        case 's':
+        case 'S':
+        case 'س':
+          e.preventDefault();
+          toggleSpeakerNotes();
+          break;
+        case 'f':
+        case 'F':
+          e.preventDefault();
+          toggleFullscreen();
+          break;
+        case 'l':
+        case 'L':
+          e.preventDefault();
+          toggleLanguage();
+          break;
+        case 'p':
+        case 'P':
+          e.preventDefault();
+          window.print();
+          break;
+      }
+    });
+
+    // Touch Swipe Navigation for Tablets / Mobile
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    window.addEventListener('touchstart', e => {
+      touchStartX = e.changedTouches[0].screenX;
+    });
+
+    window.addEventListener('touchend', e => {
+      touchEndX = e.changedTouches[0].screenX;
+      if (touchEndX < touchStartX - 50) {
+        nextSlide();
+      }
+      if (touchEndX > touchStartX + 50) {
+        prevSlide();
+      }
+    });
+
+    // Initialize
+    updateSlide();
+  </script>
+</body>
+</html>
